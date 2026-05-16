@@ -1,0 +1,263 @@
+```c
+#include <stdio.h>
+#include <string.h>
+
+struct Currency
+{
+    char code[10];
+    float rate;
+};
+
+struct Currency c[100];
+int n = 0;
+
+// Insert Currency
+void insert()
+{
+    printf("Enter Currency Code: ");
+    scanf("%s", c[n].code);
+
+    printf("Enter Exchange Rate: ");
+    scanf("%f", &c[n].rate);
+
+    n++;
+    printf("Currency Inserted Successfully!\n");
+}
+
+// Display
+void display()
+{
+    int i;
+
+    if(n == 0)
+    {
+        printf("No Records Found!\n");
+        return;
+    }
+
+    printf("\n--- Currency List ---\n");
+
+    for(i = 0; i < n; i++)
+    {
+        printf("%d. %s = %.2f\n", i + 1, c[i].code, c[i].rate);
+    }
+}
+
+// Delete Currency
+void deleteCurrency()
+{
+    char code[10];
+    int i, j, found = 0;
+
+    printf("Enter Currency Code to Delete: ");
+    scanf("%s", code);
+
+    for(i = 0; i < n; i++)
+    {
+        if(strcmp(c[i].code, code) == 0)
+        {
+            found = 1;
+
+            for(j = i; j < n - 1; j++)
+            {
+                c[j] = c[j + 1];
+            }
+
+            n--;
+            printf("Currency Deleted Successfully!\n");
+            break;
+        }
+    }
+
+    if(found == 0)
+    {
+        printf("Currency Not Found!\n");
+    }
+}
+
+// Modify Currency
+void modify()
+{
+    char code[10];
+    int i, found = 0;
+
+    printf("Enter Currency Code to Modify: ");
+    scanf("%s", code);
+
+    for(i = 0; i < n; i++)
+    {
+        if(strcmp(c[i].code, code) == 0)
+        {
+            found = 1;
+
+            printf("Enter New Exchange Rate: ");
+            scanf("%f", &c[i].rate);
+
+            printf("Currency Modified Successfully!\n");
+            break;
+        }
+    }
+
+    if(found == 0)
+    {
+        printf("Currency Not Found!\n");
+    }
+}
+
+// Currency Conversion
+void convert()
+{
+    char from[10], to[10];
+    float amount;
+    float fromRate = 0, toRate = 0;
+    int i;
+
+    printf("Enter From Currency: ");
+    scanf("%s", from);
+
+    printf("Enter To Currency: ");
+    scanf("%s", to);
+
+    printf("Enter Amount: ");
+    scanf("%f", &amount);
+
+    for(i = 0; i < n; i++)
+    {
+        if(strcmp(c[i].code, from) == 0)
+        {
+            fromRate = c[i].rate;
+        }
+
+        if(strcmp(c[i].code, to) == 0)
+        {
+            toRate = c[i].rate;
+        }
+    }
+
+    if(fromRate == 0 || toRate == 0)
+    {
+        printf("Invalid Currency Code!\n");
+        return;
+    }
+
+    float result = (amount / fromRate) * toRate;
+
+    printf("Converted Amount = %.2f %s\n", result, to);
+}
+
+// Merge Two Currency Lists
+void merge()
+{
+    struct Currency temp[100];
+    int m, i;
+
+    printf("Enter Number of Extra Currencies to Merge: ");
+    scanf("%d", &m);
+
+    for(i = 0; i < m; i++)
+    {
+        printf("Enter Currency Code: ");
+        scanf("%s", temp[i].code);
+
+        printf("Enter Exchange Rate: ");
+        scanf("%f", &temp[i].rate);
+
+        c[n] = temp[i];
+        n++;
+    }
+
+    printf("Currency Lists Merged Successfully!\n");
+}
+
+// Separate Currency
+void separate()
+{
+    float limit;
+    int i;
+
+    printf("Enter Rate Limit: ");
+    scanf("%f", &limit);
+
+    printf("\nCurrencies Greater Than %.2f\n", limit);
+
+    for(i = 0; i < n; i++)
+    {
+        if(c[i].rate > limit)
+        {
+            printf("%s = %.2f\n", c[i].code, c[i].rate);
+        }
+    }
+
+    printf("\nCurrencies Less Than or Equal To %.2f\n", limit);
+
+    for(i = 0; i < n; i++)
+    {
+        if(c[i].rate <= limit)
+        {
+            printf("%s = %.2f\n", c[i].code, c[i].rate);
+        }
+    }
+}
+
+// Main Function
+int main()
+{
+    int choice;
+
+    while(1)
+    {
+        printf("\n===== Currency Converter Menu =====\n");
+        printf("1. Insert Currency\n");
+        printf("2. Display Currency\n");
+        printf("3. Delete Currency\n");
+        printf("4. Modify Currency\n");
+        printf("5. Convert Currency\n");
+        printf("6. Merge Currency List\n");
+        printf("7. Separate Currency\n");
+        printf("8. Exit\n");
+
+        printf("Enter Your Choice: ");
+        scanf("%d", &choice);
+
+        switch(choice)
+        {
+            case 1:
+                insert();
+                break;
+
+            case 2:
+                display();
+                break;
+
+            case 3:
+                deleteCurrency();
+                break;
+
+            case 4:
+                modify();
+                break;
+
+            case 5:
+                convert();
+                break;
+
+            case 6:
+                merge();
+                break;
+
+            case 7:
+                separate();
+                break;
+
+            case 8:
+                printf("Program Ended!\n");
+                return 0;
+
+            default:
+                printf("Invalid Choice!\n");
+        }
+    }
+
+    return 0;
+}
+```
